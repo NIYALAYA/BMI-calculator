@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your BMI easily with this simple and user-friendly BMI Calculator. Enter your height and weight to find out your health status.">
+    <meta name="keywords" content="BMI Calculator, Health, Body Mass Index, Fitness, Weight, Height, Niyalaya">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Niyalaya">
+    <title>BMI Calculator | Niyalaya</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>BMI Calculator</h1>
+        <p>Find out your Body Mass Index (BMI) and understand your health status.</p>
+
+        <form id="bmiForm">
+            <input type="number" id="height" placeholder="Height in cm" required>
+            <input type="number" id="weight" placeholder="Weight in kg" required>
+            <button type="submit">Calculate BMI</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('bmiForm');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const weight = parseFloat(document.getElementById('weight').value);
+
+            if (height > 0 && weight > 0) {
+                const bmi = (weight / (height * height)).toFixed(1);
+                let status = '';
+
+                if (bmi < 18.5) {
+                    status = 'Underweight';
+                } else if (bmi >= 18.5 && bmi < 24.9) {
+                    status = 'Normal weight';
+                } else if (bmi >= 25 && bmi < 29.9) {
+                    status = 'Overweight';
+                } else {
+                    status = 'Obese';
+                }
+
+                result.textContent = `Your BMI: ${bmi} (${status})`;
+            } else {
+                result.textContent = "Please enter valid height and weight.";
+            }
+        });
+    </script>
+</body>
+</html>
