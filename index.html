@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta name="description" content="Advanced BMI Calculator with animated visuals, SEO optimization, and indexed performance. Get accurate BMI results effortlessly.">
+    <meta name="keywords" content="BMI calculator, health tool, wellness tracker, SEO optimized, responsive design, branding">
+    <meta name="author" content="Yogi">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Advanced BMI Calculator">
+    <meta property="og:description" content="Interactive BMI Calculator with sleek design, SEO optimization, and smooth animations.">
+    <meta property="og:image" content="URL_TO_YOUR_IMAGE">
+    <meta property="og:url" content="URL_TO_YOUR_WEBSITE">
+    <title>SEO-Optimized BMI Calculator | Niyalaya</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0048ff, #00aaff);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 90vw; height: 90vh; max-width: 500px; padding: 30px;
+            background: rgba(0, 0, 0, 0.8); border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); text-align: center;
+        }
+        h2 { font-size: 24px; margin-bottom: 20px; }
+        .input-container {
+            display: flex; justify-content: space-between; gap: 15px; margin-bottom: 15px;
+        }
+        input, select {
+            width: 48%; padding: 12px; font-size: 16px;
+            border-radius: 5px; border: none; text-align: center;
+        }
+        button {
+            width: 100%; background-color: #8e24aa; color: white;
+            font-size: 18px; padding: 12px; cursor: pointer;
+            transition: all 0.3s ease-in-out; margin-top: 10px;
+        }
+        button:hover { background-color: #6a1b9a; }
+        #result { font-size: 18px; font-weight: bold; margin-top: 15px; }
+        .chart-container { width: 100%; height: 250px; margin: auto; margin-top: 20px; }
+        #bmiCategory {
+            font-size: 22px; font-weight: bold; margin-top: 15px; padding: 10px;
+            border-radius: 5px; display: inline-block; transition: all 0.5s ease-in-out;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Courier New', Courier, monospace;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>BMI Calculator</h2>
+        <div class="input-container">
+            <input type="number" id="height" placeholder="Height">
+            <select id="heightUnit">
+                <option value="cm">cm</option>
+                <option value="inches">inches</option>
+                <option value="feet">feet</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="weight" placeholder="Weight">
+            <select id="weightUnit">
+                <option value="kg">kg</option>
+                <option value="lbs">lbs</option>
+            </select>
+        </div>
+
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div id="result"></div>
+
+        <div class="chart-container">
+            <canvas id="bmiChart"></canvas>
+        </div>
+
+        <div id="bmiCategory"></div>
+        <div class="watermark">NIYALAYA</div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            let height = parseFloat(document.getElementById("height").value);
+            let weight = parseFloat(document.getElementById("weight").value);
+            let heightUnit = document.getElementById("heightUnit").value;
+            let weightUnit = document.getElementById("weightUnit").value;
+            let bmiCategory = document.getElementById("bmiCategory");
+
+            if (heightUnit === "inches") { height *= 2.54; }
+            else if (heightUnit === "feet") { height *= 30.48; }
+
+            if (weightUnit === "lbs") { weight *= 0.453592; }
+
+            if (height > 0 && weight > 0) {
+                let bmi = weight / ((height / 100) ** 2);
+                document.getElementById("result").innerHTML = `Your BMI is: ${bmi.toFixed(2)}`;
+
+                let category, color;
+                if (bmi < 18.5) {
+                    category = "You are Underweight"; color = "#0048ff";
+                } else if (bmi >= 18.5 && bmi <= 24.9) {
+                    category = "Your BMI is Normal"; color = "#00aa00";
+                } else if (bmi >= 25 && bmi <= 29.9) {
+                    category = "You are Overweight"; color = "#ffcc00";
+                } else {
+                    category = "You are Obese"; color = "#ff5733";
+                }
+
+                bmiCategory.innerHTML = category;
+                bmiCategory.style.backgroundColor = color;
+                bmiCategory.style.color = "white";
+                bmiCategory.style.display = "inline-block";
+
+                updateChart(bmi);
+            } else {
+                document.getElementById("result").innerHTML = "Please enter valid values.";
+            }
+        }
+
+        function updateChart(bmi) {
+            const ctx = document.getElementById('bmiChart').getContext('2d');
+            if (window.bmiChartInstance) window.bmiChartInstance.destroy();
+
+            window.bmiChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+                    datasets: [{
+                        label: 'BMI Range',
+                        data: [18.5, 24.9, 29.9, 40],
+                        backgroundColor: ['#0048ff', '#00aa00', '#ffcc00', '#ff5733'],
+                        borderColor: 'white', borderWidth: 2
+                    }]
+                },
+                options: {
+                    animation: { duration: 1500, easing: 'easeInOutBounce' },
+                    responsive: true, scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
